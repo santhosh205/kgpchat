@@ -9,7 +9,7 @@
         content-class="elevation-1"
         transition="slide-y-transition"
         :close-on-content-click="false"
-        v-model="open">
+        v-model="open" class="mr-2">
         <v-text-field color="light-blue"
           slot="activator" label="Search"
           append-icon="search"
@@ -18,22 +18,31 @@
           v-on:click.stop="open = true"
           v-on:click.native="open = false">
         </v-text-field>
-        <!-- v-text-field -> :loading="loadingSearch" -->
         <v-list v-show="matchFound"
           dense>
           <v-list-tile
             v-for="(result, index) in results"
             v-on:click="showResult(index)"
             :key="index+1">
-            <v-list-tile-title class="body-1">
+            <v-list-tile-avatar size="24px">
+              <img :src="avatars[index]">
+            </v-list-tile-avatar>
+            <v-list-tile-title class="body-1"
+              style="margin-left: -16px;">
               {{ result }}
             </v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
-      <v-spacer></v-spacer>
-      <v-avatar left size="24px" class="mr-2">
-        <img src="/static/nina.jpg">
+      <v-tooltip bottom>
+        <v-btn flat icon class="mx-2"
+          slot="activator">
+          <v-icon>group_add</v-icon>
+        </v-btn>
+        <span>Start a group chat</span>
+      </v-tooltip>
+      <v-avatar left size="24px" class="mx-2">
+        <img src="/static/nina-32x32.jpg">
       </v-avatar>
       <div class="body-2">Nina Dobrev</div>
       <v-menu bottom offset-y left
@@ -44,10 +53,24 @@
           <v-icon>arrow_drop_down</v-icon>
         </v-btn>
         <v-list dense>
-          <v-list-tile 
-            v-on:click="logout">
+          <v-list-tile
+            v-on:click="selectOption">
             <v-list-tile-title
-              class="body-2">
+              class="body-1">
+              Account
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile
+            v-on:click="selectOption">
+            <v-list-tile-title
+              class="body-1">
+              Settings
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile
+            v-on:click="selectOption">
+            <v-list-tile-title
+              class="body-1">
               Logout
             </v-list-tile-title>
           </v-list-tile>
@@ -72,6 +95,14 @@
           'Shubham Parekh',
           'Gaurav Jain',
           'Kshitij Kumar'
+        ],
+        avatars: [
+          '/static/ariel-32x32.jpg',
+          '/static/brave-32x32.jpg',
+          '/static/jasmine-32x32.jpg',
+          '/static/mulan-32x32.jpg',
+          '/static/pocahontas-32x32.jpg',
+          '/static/snow-white-32x32.jpg'
         ]
       }
     },
@@ -92,6 +123,7 @@
         }
       }
     },
+    // v-text-field -> :loading="loadingSearch"
     // computed: {
     //   loadingSearch () {
     //     if (this.searchInput !== '') {
@@ -105,8 +137,8 @@
       showResult (index) {
         console.log(this.results[index])
       },
-      logout () {
-        console.log('User logged out!')
+      selectOption () {
+        console.log('Option Selected!')
       }
     }
   }
