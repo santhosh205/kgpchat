@@ -11,7 +11,7 @@
         :close-on-content-click="false"
         v-model="open" class="mr-2">
         <v-text-field color="light-blue"
-          slot="activator" label="Search"
+          slot="activator" placeholder="Search"
           append-icon="search"
           v-model="searchInput"
           hide-details single-line
@@ -41,75 +41,58 @@
         <span>Start a group chat</span>
       </v-tooltip>
       <v-dialog v-model="openGroupChatPopup" 
-        scrollable max-width="450px">
+        scrollable max-width="480px">
         <v-card class="pa-2">
-          <v-layout row wrap>
-            <v-flex xs4 offset-xs2
-              class="text-xs-center">
-              <v-card-title>
-                Group Name:
-              </v-card-title>
-            </v-flex>
-            <v-flex xs4>
-              <v-text-field class="pt-2"
-                color="light-blue"
-                v-model="groupName"
-                hide-details single-line>
-              </v-text-field>
-            </v-flex>
-          </v-layout>
-          <div class="body-1 mb-3 mt-1"
+          <div class="subheading pa-2"
             style="width: 100%; 
             text-align: center;">
-            ----&nbsp;&nbsp;&nbsp;&nbsp;
-            Select Members
-            &nbsp;&nbsp;&nbsp;&nbsp;----
+            Select Members ({{ groupCount }})
           </div>
-          <v-divider></v-divider>
-          <div class="ma-2 text-xs-center">
-            <v-chip disabled>
-              <v-avatar>
-                <img src="/static/nina-32x32.jpg">
-              </v-avatar>
-              nina
-            </v-chip>
-            <v-chip disabled 
-              v-for="(member, index) in groupMembers"
-              :key="index+1">
-              <v-avatar>
-                <img :src="avatars[index]">
-              </v-avatar>
-              {{ member }}
-            </v-chip>
+          <div class="pa-2">
+            <v-text-field
+              color="light-blue"
+              class="elevation-0 
+                grey lighten-4"
+              prepend-icon="search"
+              solo label="Search">
+            </v-text-field>
           </div>
-          <v-divider></v-divider>
-          <v-card-text class="pa-2" style="height: 350px;">
-            <v-list>
+          <v-card-text class="px-1 py-0" 
+            style="height: 360px;">
+            <v-list class="py-0">
               <v-list-tile
-                v-for="(nickname, index) in nicknames"
+                v-for="(friend, index) in friends"
                 :key="index+1">
                 <v-list-tile-avatar size="32px">
                   <img :src="avatars[index]">
                 </v-list-tile-avatar>
                 <v-list-tile-title class="body-1">
-                  {{ nickname }}
+                  {{ friend }}
                 </v-list-tile-title>
                 <v-spacer></v-spacer>
                 <v-checkbox v-model="groupMembers" 
-                  color="light-blue" :value="nickname" 
+                  color="light-blue" :value="friend" 
                   class="pt-1" hide-details>
                 </v-checkbox>
               </v-list-tile>
             </v-list>
           </v-card-text>
-          <v-divider></v-divider>
           <v-card-actions>
+            <div style="width: 36%;">
+              <v-text-field 
+                prepend-icon="group"
+                color="light-blue"
+                placeholder="Group Name"
+                class="pt-0 ml-3"
+                hide-details single-line>
+              </v-text-field>
+            </div>
             <v-spacer></v-spacer>
-            <v-btn color="light-blue" flat
+            <v-btn color="light-blue" dark 
+              class="elevation-0 mr-3"
               v-on:click.native="openGroupChatPopup=false">
               Open
             </v-btn>
-            <v-spacer></v-spacer>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -171,14 +154,6 @@
           'Gaurav Jain',
           'Kshitij Kumar'
         ],
-        nicknames: [
-          'santhosh',
-          'aswanth',
-          'shreyans',
-          'shubham',
-          'gaurav',
-          'kshitij'
-        ],
         avatars: [
           '/static/ariel-32x32.jpg',
           '/static/brave-32x32.jpg',
@@ -206,16 +181,19 @@
         }
       }
     },
-    // v-text-field -> :loading="loadingSearch"
-    // computed: {
-    //   loadingSearch () {
-    //     if (this.searchInput !== '') {
-    //       return true
-    //     } else {
-    //       return false
-    //     }
-    //   }
-    // },
+    computed: {
+      // v-text-field -> :loading="loadingSearch"
+      // loadingSearch () {
+      //   if (this.searchInput !== '') {
+      //     return true
+      //   } else {
+      //     return false
+      //   }
+      // }
+      groupCount () {
+        return this.groupMembers.length + 1
+      }
+    },
     methods: {
       showResult (index) {
         console.log(this.results[index])
